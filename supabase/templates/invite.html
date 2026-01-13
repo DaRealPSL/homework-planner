@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>You're invited to Studiflow</title>
+<style>
+  body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f6f9fc;color:#0f1724}
+  .wrap{width:100%;padding:18px}
+  .card{max-width:680px;margin:0 auto;background:#071227;border-radius:12px;box-shadow:0 8px 28px rgba(2,6,23,.6);overflow:hidden}
+  .hdr{padding:18px;display:flex;gap:12px;align-items:center;background:linear-gradient(180deg,#071227,#041125)}
+  .logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,#062244,#0a3a78);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+  .title{color:#e6eef8;font-weight:700}
+  .body{padding:22px;color:#cfe6ff}
+  h1{margin:0 0 8px;font-size:18px;color:#fff}
+  p{margin:0 0 12px;font-size:15px}
+  .btn{display:inline-block;padding:12px 20px;border-radius:10px;background:#0b5ed7;color:#fff;text-decoration:none;font-weight:600}
+  .muted{color:#90a9c6;font-size:13px}
+  .ftr{padding:14px 18px;background:#041125;color:#7f98b6;text-align:center;font-size:13px}
+</style>
+</head>
+<body>
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all">You've been invited to Studiflow</div>
+<div class="wrap">
+  <div class="card" role="presentation">
+    <div class="hdr">
+      <div class="logo">S</div>
+      <div class="title">You're invited to Studiflow</div>
+    </div>
+    <div class="body">
+      <h1>Invitation to join</h1>
+      <p><strong>{{ .Email }}</strong> has been invited to join Studiflow. Accept the invite to create your account and get started.</p>
+      <p style="text-align:center;margin:18px 0;"><a href="{{ .ConfirmationURL }}" class="btn" target="_blank" rel="noreferrer noopener">Accept invitation</a></p>
+      <p class="muted">If the button doesn't work, paste this link into your browser:</p>
+      <p class="muted"><a href="{{ .ConfirmationURL }}" target="_blank" rel="noreferrer noopener">{{ .ConfirmationURL }}</a></p>
+      <p class="muted" style="margin-top:12px">If you weren't expecting this invite, you can ignore this email.</p>
+    </div>
+    <div class="ftr">Studiflow • <a href="{{ .SiteURL }}" style="color:inherit;text-decoration:underline">{{ .SiteURL }}</a></div>
+  </div>
+</div>
+</body>
+</html>

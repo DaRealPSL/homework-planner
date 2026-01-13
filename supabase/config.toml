@@ -1,0 +1,25 @@
+# INVITE EMAIL CONFIG
+[auth.email.template.invite]
+subject = "You have been invited to Studiflow"
+content_path = "./supabase/templates/invite.html"
+
+# PASSWORD CHANGED CONFIG
+[auth.email.notification.password_changed]
+enabled = true
+subject = "Your password has been changed"
+content_path = "./templates/password_changed_notification.html"
+
+# SIGNUP CONFIRMATION CONFIG
+[auth.email.template.confirmation]
+subject = "Confirm your signup"
+content_path = "./supabase/templates/confirmation.html"
+
+# PASSWORD RECOVERY (RESET) EMAIL CONFIG
+[auth.email.template.recovery]
+subject = "Reset your password"
+content_path = "./supabase/templates/recovery.html"
+
+# MAGIC LINK (PASSWORDLESS LOGIN) EMAIL CONFIG
+[auth.email.template.magic_link]
+subject = "Your magic link"
+content_path = "./supabase/templates/magic_link.html"

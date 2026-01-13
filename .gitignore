@@ -1,0 +1,401 @@
+# ------------------------
+# Global / OS
+# ------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Icon?
+Icon
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# ------------------------
+# Environment / Secrets
+# ------------------------
+# Node/.env
+.env
+.env.*.local
+.env.local
+.env.production
+.env.test
+.env.development
+.env.*.secret
+.env.*.key
+.env.example
+
+# Secret key files
+*.pem
+*.p12
+*.key
+*.crt
+
+# credentials
+credentials
+credentials-*.json
+
+# .netrc
+.netrc
+
+# ------------------------
+# Supabase / local dev
+# ------------------------
+.supabase/
+supabase/.cache/
+supabase/db/*.db
+supabase/.localstack/
+supabase/migrations/*.lock
+supabase/migrations/.tmp/
+supabase/storage/.cache/
+supabase/functions/.build/
+supabase/.secrets
+
+# Supabase CLI local files
+supabase/config.toml.local
+supabase/config.toml.*.local
+
+# ------------------------
+# Node / JavaScript / TypeScript
+# ------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+.pnp.*
+.vscode-test/
+# dist / build
+dist/
+build/
+out/
+. next/
+.next/
+.next/*
+
+# Parcel, Vite, Snowpack, etc.
+.parcel-cache/
+.cache/
+.snowpack/
+.vite/
+turbo/
+.cache/
+*.tgz
+
+# Lock files sometimes you might want to ignore, but most repos commit them; comment if you want to track
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# ------------------------
+# Python
+# ------------------------
+# bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# virtualenvs
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# pipenv
+Pipfile.lock
+
+# pytest
+.cache
+.coverage
+htmlcov/
+.tox/
+coverage.xml
+
+# ------------------------
+# Go
+# ------------------------
+# Binary output
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go build cache
+GOMODCACHE/
+pkg/
+vendor/
+
+# ------------------------
+# Java / Kotlin / Gradle / Maven
+# ------------------------
+*.class
+*.jar
+*.war
+*.ear
+build/
+out/
+target/
+.gradle/
+.gradle-cache/
+.idea/
+*.iml
+
+# ------------------------
+# Rust / Cargo
+# ------------------------
+target/
+**/*.rs.bk
+
+# ------------------------
+# C / C++ / Make
+# ------------------------
+*.o
+*.obj
+*.so
+*.exe
+*.dll
+*.dylib
+*.out
+build/
+
+# ------------------------
+# .NET
+# ------------------------
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ------------------------
+# IDEs / Editors
+# ------------------------
+# VSCode
+.vscode/
+.history/
+.code-workspace
+
+# IntelliJ / JetBrains
+.idea/
+*.iml
+*.iws
+.idea_modules/
+
+# Sublime
+*.sublime-workspace
+*.sublime-project
+
+# Emacs
+*~ 
+.projectile
+.cache/
+# Vim
+.swp
+*.swx
+
+# ------------------------
+# Containers / Docker
+# ------------------------
+docker-compose.override.yml
+docker-compose.*.yml
+.docker
+**/Dockerfile.build
+docker-compose.override.yml
+docker-compose.*.local.yml
+# docker volumes
+data/
+tmp/
+
+# ------------------------
+# Terraform
+# ------------------------
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+override.tf
+override.tf.json
+crash.log
+crash.log.*
+*.tfplan
+
+# ------------------------
+# CI / CD
+# ------------------------
+# GitHub Actions
+.github/actions/**/node_modules/
+# CircleCI
+.circleci/
+# GitLab
+.gitlab/
+# Jenkins
+.jenkins/
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+
+# ------------------------
+# Logs
+# ------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ------------------------
+# Testing / Coverage / Reports
+# ------------------------
+coverage/
+coverage-final.json
+lcov-report/
+test-results/
+
+# ------------------------
+# Generated docs / site builds
+# ------------------------
+site/
+docs/
+public/
+webpack-stats.json
+
+# ------------------------
+# Static assets / Image caches
+# ------------------------
+.sass-cache
+.cache-loader
+media/
+tmp/
+uploads/
+*.lock
+
+# ------------------------
+# Fonts / binary assets you don't want in repo
+# ------------------------
+*.ttf
+*.woff
+*.woff2
+*.eot
+*.otf
+
+# ------------------------
+# Editor backups and project files
+# ------------------------
+*.bak
+*.orig
+*.backup
+*.sw?
+*~.nib
+*.sublime-*
+
+# ------------------------
+# Misc / OS generated files and misc caches
+# ------------------------
+.vagrant/
+.vagrant.d/
+.idea/
+*.pem
+*.key
+*.crt
+*.log
+*.pid
+*.seed
+*.cache
+coverage/
+.cache
+*.DS_Store
+*.desktop
+
+# ------------------------
+# VSCode settings sync backup
+# ------------------------
+.sync/
+
+# ------------------------
+# Local CI runner files
+# ------------------------
+.run/
+tmp/*
+.cache/
+
+# ------------------------
+# JetBrains local history and caches
+# ------------------------
+.idea/
+.idea/*workspace.xml
+.idea/*tasks.xml
+.idea/dictionaries/
+
+# ------------------------
+# JetBrains Rider / ReSharper
+# ------------------------
+.idea/
+*.suo
+*_ReSharper*/
+_ReSharper*/
+*.DotSettings.user
+
+# ------------------------
+# MacOS specific
+# ------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ------------------------
+# User-specific sensitive files — EXPLICITLY IGNORE
+# ------------------------
+# local config, secrets & keys
+*.local.*
+credentials.*
+secrets.*
+*.secret
+*.key
+*-secrets.json
+
+# ------------------------
+# Optional: ignore everything built by common frameworks / packages
+# ------------------------
+# Next.js, Nuxt, Gatsby, Eleventy, etc.
+.next/
+.nuxt/
+.gatsby-cache/
+.cache/
+.public/
+
+# ------------------------
+# Keep Git from accidentially committing large files tracked somewhere else
+# ------------------------
+# Large files
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+*.bak
+*.backup
+*.log
+
+# ------------------------
+# End
+# ------------------------
