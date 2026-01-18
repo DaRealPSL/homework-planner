@@ -33,7 +33,6 @@ $RECYCLE.BIN/
 .env.development
 .env.*.secret
 .env.*.key
-.env.example
 
 # Secret key files
 *.pem
@@ -277,6 +276,8 @@ site/
 docs/
 public/
 webpack-stats.json
+DEPLOYMENT.md
+PROJECT_SUMMARY.md
 
 # ------------------------
 # Static assets / Image caches

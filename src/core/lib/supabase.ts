@@ -1,10 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database";
 
-const DEBUG = false;
+import { supabaseAnonKey, supabaseUrl} from '../config/constants';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
+const DEBUG = false;
 
 if (DEBUG) {
   console.group("Supabase debug");

@@ -1,0 +1,69 @@
+# STUDIFLOW SOURCE-AVAILABLE LICENSE
+
+**Version 1.1** 
+
+**Copyright (c) 2026 Pepijn Snoeren**
+
+---
+
+### 1. DEFINITIONS
+
+* **"Software"** refers to the source code, documentation, and related assets in this repository.
+* **"Author"** refers to Pepijn Snoeren, the copyright holder.
+* **"Commercial Use"** means any use intended for or directed toward commercial advantage, monetary compensation, or use by or on behalf of a for-profit entity. This includes, but is not limited to, offering the Software as a service, using it within a paid product, or operating it as part of business operations.
+* **"Official Product"** refers to the hosted version of Studiflow and its associated branding managed by the Author.
+
+### 2. GRANT OF LICENSE
+
+Subject to the terms of this License, the Author grants you a non-exclusive, royalty-free, non-transferable license to:
+
+* **Use and Run:** Execute the Software locally for personal, educational, or non-commercial research purposes.
+* **View and Modify:** Access, study, and create modifications (derivatives) of the source code for personal or educational use.
+* **Fork:** You may create public forks of this repository on hosting platforms (e.g., GitHub) **only** for personal, educational, or non-commercial experimentation and contribution. Public forks must include this LICENSE file and remain under the same terms; they may not be re-licensed, redistributed for commercial use, or used to operate a competing hosted service.
+
+All rights granted are non-exclusive, non-transferable, and non-sublicensable, unless a separate commercial license has been negotiated with the Author.
+
+### 3. RESTRICTIONS
+
+This license is strictly limited. You **may not**:
+
+* **Redistribute for Production:** Publish, sublicense, or distribute the Software (or its derivatives) as a standalone product, library, or public-facing service.
+* **Commercialize:** Sell, lease, or use the Software in any Commercial Use context without a separate agreement.
+* **Host/SaaS:** Offer the Software as a hosted service, Software-as-a-Service (SaaS), or cloud-based tool.
+* **Create Competing Projects:** Distribute or publish the Software as a product that duplicates the core functionality of the Official Product or uses the Studiflow branding to attract users.
+* **Re-license:** Public forks must remain under this exact License and may not be redistributed under any other terms (e.g., MIT, GPL).
+
+### 4. ATTRIBUTION
+
+In all permitted uses, including forks, you must retain the original copyright notice, this license text, and a clear link/attribution to the Author.
+
+### 5. CONTRIBUTIONS
+
+By submitting a contribution (e.g., Pull Request, patch, or issue containing code), you grant the Author a perpetual, irrevocable, royalty-free, worldwide license to use, modify, and distribute your contribution under the terms of this License or any future license the Author chooses for the project.
+
+Contributors should indicate acceptance by adding a line to the commit or PR description: "Signed-off-by: <Name> <email>" (Developer Certificate of Origin style) or by agreeing to the CONTRIBUTING.md before submitting.
+
+
+### 6. RESERVED RIGHTS & INFRASTRUCTURE
+
+The Author reserves all rights to the project’s name, logos, and branding. This License does **not** grant access to:
+
+* The Author’s proprietary infrastructure or hosting environments.
+* Proprietary APIs or backend services used by the Official Product.
+
+### 7. TERMINATION
+
+Your rights under this License terminate automatically if you materially breach any of its terms. If the breach is curable, you have 30 days from written notice by the Author to cure the breach; otherwise, all rights granted to you will cease immediately.
+
+### 8. COMMERCIAL LICENSING
+
+For commercial use, enterprise deployment, or hosting rights, please contact **pepijnl.snoeren0@gmail.com** to negotiate a separate commercial license.
+
+### 9. SEVERABILITY & GOVERNING LAW
+
+If any provision of this License is held invalid or unenforceable, the remaining provisions shall remain in full force. This License is governed by the laws of the Netherlands (or your preferred jurisdiction).
+
+
+### 10. DISCLAIMER OF WARRANTY
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE USE OF THE SOFTWARE.
