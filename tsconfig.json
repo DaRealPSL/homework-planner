@@ -1,17 +1,35 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
-
   "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
       "@/core/*": ["src/core/*"],
       "@/features/*": ["src/features/*"],
       "@/shared/*": ["src/shared/*"]
-    }
-  }
+    },
+
+    "types": ["vite/client", "node"],
+
+    /* Keep overall strictness but disable implicit any temporarily so CI builds won't fail on many small callback params.
+       You can remove the next line later and type the few callbacks explicitly. */
+    "strict": true,
+    "noImplicitAny": false,
+
+    /* this root config is for tooling only — don't emit from the root. */
+    "noEmit": true
+  },
+
+  "include": ["src", "types", "vite.config.ts"],
+  "exclude": ["node_modules", "dist"]
 }

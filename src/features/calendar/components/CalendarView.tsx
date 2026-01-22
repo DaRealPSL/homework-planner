@@ -1,8 +1,10 @@
+//src/features/calendar/components/CalendarView.tsx
 import React, { useState } from 'react';
-import type { Homework } from '@/core/types/database';
+//import type { Homework } from '@/core/types/database';
+import type { HomeworkWithRelations } from '@/core/types/supabase-overrides';
 
 interface CalendarViewProps {
-  homework: Homework[];
+  homework: HomeworkWithRelations[];
   selectedDate: Date | null;
   onDateSelect: (date: Date) => void;
 }
@@ -24,6 +26,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
 
   const getHomeworkForDate = (date: Date) => {
     return homework.filter(hw => {
+      if (!hw.due_date) return false;
       const dueDate = new Date(hw.due_date);
       return dueDate.toDateString() === date.toDateString();
     });
@@ -58,7 +61,8 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   const renderCalendar = () => {
     const daysInMonth = getDaysInMonth(currentDate);
     const firstDay = getFirstDayOfMonth(currentDate);
-    const days = [];
+    //const days = [];
+    const days: React.ReactElement[] = [];
 
     // Previous month days
     for (let i = 0; i < firstDay; i++) {

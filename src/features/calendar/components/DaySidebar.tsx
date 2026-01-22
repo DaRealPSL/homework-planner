@@ -1,20 +1,25 @@
+//src/features/calendar/components/DaySidebar.tsx
 import React, { useState } from 'react';
 
 interface HomeworkItem {
   id: string;
-  class_id: string;
-  title: string;
+  // class_id: string;
+  // title: string;
+  class_id?: string;
+  title?: string | null;
   description: string | null;
   subject: string | null;
-  due_date: string;
+  due_date: string | null | undefined;
   created_by: string | null;
-  created_at: string;
-  updated_at: string;
+  // created_at: string;
+  // updated_at: string;
+  created_at?: string | null;
+  updated_at?: string | null;
   creator?: {
-    display_name: string;
+    // display_name: string;
+    display_name?: string | null;
     avatar_url: string | null;
   };
-  // some payloads may use homework_attachments / homework_completion names from supabase
   attachments?: Array<{
     id: string;
     storage_path: string;
@@ -25,10 +30,9 @@ interface HomeworkItem {
     done: boolean;
     user_id: string;
   }>;
-  // fallback names Supabase might return
   homework_attachments?: unknown;
   homework_completion?: unknown;
-}
+};
 
 interface DaySidebarProps {
   isOpen: boolean;
@@ -71,6 +75,7 @@ export const DaySidebar: React.FC<DaySidebarProps> = ({
   };
 
   const getPriorityColor = (dueDate: string) => {
+    //if (!dueDate) return 'border-gray-700 bg-gray-800/50';
     const now = new Date();
     const due = new Date(dueDate);
     const diffTime = due.getTime() - now.getTime();
@@ -93,17 +98,15 @@ export const DaySidebar: React.FC<DaySidebarProps> = ({
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 z-40 ${
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 z-40 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
         onClick={onClose}
       />
 
       {/* Sidebar */}
       <div
-        className={`fixed right-0 top-0 h-full w-full sm:w-96 bg-gray-800 shadow-2xl z-50 transform transition-transform duration-300 border-l border-gray-700 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed right-0 top-0 h-full w-full sm:w-96 bg-gray-800 shadow-2xl z-50 transform transition-transform duration-300 border-l border-gray-700 ${isOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
@@ -153,19 +156,19 @@ export const DaySidebar: React.FC<DaySidebarProps> = ({
                     <div
                       key={hw.id}
                       className={`border-2 rounded-xl p-4 transition-all duration-200 hover:shadow-lg ${
-                        getPriorityColor(hw.due_date)
-                      }`}
+                        //getPriorityColor(hw.due_date)
+                        hw.due_date ? getPriorityColor(hw.due_date) : 'border-gray-700 bg-gray-800/50'
+                        }`}
                     >
                       <div className="flex items-start justify-between mb-3">
                         <h3 className="font-semibold text-white flex-1 text-base">{hw.title}</h3>
                         <div className="flex items-center gap-2 ml-2">
                           <button
                             onClick={() => onToggleCompletion(hw.id, !isDone)}
-                            className={`p-2 rounded-lg transition-all ${
-                              isDone
+                            className={`p-2 rounded-lg transition-all ${isDone
                                 ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30'
                                 : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
-                            }`}
+                              }`}
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -201,7 +204,8 @@ export const DaySidebar: React.FC<DaySidebarProps> = ({
                           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
-                          {formatTime(hw.due_date)}
+                          {/*{formatTime(hw.due_date)}*/}
+                          {hw.due_date ? formatTime(hw.due_date) : 'No due date'}
                         </span>
                         {hw.creator?.display_name && (
                           <span className="flex items-center gap-1">
@@ -224,7 +228,7 @@ export const DaySidebar: React.FC<DaySidebarProps> = ({
                             </svg>
                             {selectedHomework === hw.id ? 'Hide' : 'View'} {attachmentsArr.length} attachment{attachmentsArr.length !== 1 ? 's' : ''}
                           </button>
-                          
+
                           {selectedHomework === hw.id && (
                             <div className="mt-3 space-y-2">
                               {attachmentsArr.map((att: any) => (

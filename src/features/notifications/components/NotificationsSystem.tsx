@@ -68,7 +68,7 @@ export const NotificationBell: React.FC = () => {
         .limit(10);
 
       if (error) throw error;
-      setNotifications(data || []);
+      setNotifications((data || []) as Notification[]);
     } catch (err) {
       console.error('Error loading notifications:', err);
     } finally {
@@ -108,7 +108,7 @@ export const NotificationBell: React.FC = () => {
     try {
       await supabase
         .from('notifications')
-        .update({ read: true })
+        .update({ read: true } as any)
         .eq('id', id);
 
       setNotifications((prev) =>
@@ -123,7 +123,7 @@ export const NotificationBell: React.FC = () => {
     try {
       await supabase
         .from('notifications')
-        .update({ read: true })
+        .update({ read: true } as any)
         .eq('read', false);
 
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));

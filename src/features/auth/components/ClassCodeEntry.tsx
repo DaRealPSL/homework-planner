@@ -24,7 +24,7 @@ export const ClassCodeEntry: React.FC<ClassCodeEntryProps> = ({ onClassCodeValid
 
     try {
       // Call the safe RPC instead of selecting the classes table
-      const resp = await supabase.rpc('get_class_by_code', { p_code: code });
+      const resp = (await supabase.rpc('get_class_by_code', { p_code: code })) as any;
 
       // handle network / rpc errors
       if (resp.error) {

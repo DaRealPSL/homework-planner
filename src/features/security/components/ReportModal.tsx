@@ -1,5 +1,6 @@
+//src/features/security/components/ReportModal.tsx
 import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@/core/lib/supabase';
 
 // Content filtering for inappropriate words
 const inappropriateWords = [

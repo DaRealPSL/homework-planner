@@ -1,15 +1,40 @@
+// src/hooks/useRealtimeHomework.ts
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/core/lib/supabase';
-import type { Homework, HomeworkAttachment, HomeworkCompletion } from '@/core/types/database';
 import { getCurrentUser } from '@/core/lib/supabase';
+import type { Homework, HomeworkAttachment, HomeworkCompletion } from '@/core/types/database';
+import type {
+  HomeworkWithRelations,
+  RealtimePostgresPayload,
+} from '@/core/types/supabase-overrides';
 
-interface HomeworkWithRelations extends Homework {
-  attachments: HomeworkAttachment[];
-  completion: HomeworkCompletion[];
-  creator?: {
-    display_name: string | null;
-    avatar_url: string | null;
-  };
+/**
+ * Normalize a raw row returned by Supabase (which uses `homework_attachments` and
+ * `homework_completion`) into our `HomeworkWithRelations` shape (which expects
+ * `attachments` and `completion`).
+ */
+function normalizeRow(raw: any): HomeworkWithRelations {
+  return {
+    // copy base homework fields (we keep unknown extras)
+    ...(raw as Homework),
+
+    // map relation fields
+    attachments: (raw.homework_attachments as HomeworkAttachment[]) ?? [],
+    completion: (raw.homework_completion as HomeworkCompletion[]) ?? [],
+
+    // map creator (supabase returned field name in your select)
+    creator:
+      raw.creator && typeof raw.creator === 'object'
+        ? {
+            display_name: raw.creator.display_name ?? null,
+            avatar_url: raw.creator.avatar_url ?? null,
+          }
+        : undefined,
+
+    // allow other fields to pass through
+    // (if raw has fields that are not in Homework, they'll remain on the object)
+    // NOTE: the spread above already copied raw fields; we intentionally keep it.
+  } as HomeworkWithRelations;
 }
 
 export function useRealtimeHomework(classId: string) {
@@ -22,7 +47,7 @@ export function useRealtimeHomework(classId: string) {
       setLoading(true);
       setError(null);
 
-      const { data, error } = await supabase
+      const { data, error: fetchError } = await supabase
         .from('homework')
         .select(`
           *,
@@ -33,9 +58,11 @@ export function useRealtimeHomework(classId: string) {
         .eq('class_id', classId)
         .order('due_date', { ascending: true });
 
-      if (error) throw error;
+      if (fetchError) throw fetchError;
 
-      setHomework(data || []);
+      const rows = (data as any[]) ?? [];
+      const normalized = rows.map(normalizeRow);
+      setHomework(normalized);
     } catch (err) {
       setError(err as Error);
     } finally {
@@ -59,23 +86,29 @@ export function useRealtimeHomework(classId: string) {
           table: 'homework',
           filter: `class_id=eq.${classId}`,
         },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            setHomework((prev) => [...prev, payload.new as HomeworkWithRelations]);
-          } else if (payload.eventType === 'UPDATE') {
-            setHomework((prev) =>
-              prev.map((hw) =>
-                hw.id === payload.new.id ? (payload.new as HomeworkWithRelations) : hw
-              )
-            );
-          } else if (payload.eventType === 'DELETE') {
-            setHomework((prev) => prev.filter((hw) => hw.id !== payload.old.id));
+        (payload: RealtimePostgresPayload<any>) => {
+          // Normalize incoming payload rows (payload.new / payload.old use DB names)
+          const newRaw = (payload.new ?? null) as any;
+          const oldRaw = (payload.old ?? null) as any;
+          const newRow = newRaw ? normalizeRow(newRaw) : null;
+          const oldRow = oldRaw ? normalizeRow(oldRaw) : null;
+          const evt = (payload.eventType || '').toUpperCase();
+
+          if (evt === 'INSERT' && newRow) {
+            setHomework((prev) => {
+              const exists = prev.some((h) => h.id === newRow.id);
+              return exists ? prev : [...prev, newRow];
+            });
+          } else if (evt === 'UPDATE' && newRow) {
+            setHomework((prev) => prev.map((hw) => (hw.id === newRow.id ? newRow : hw)));
+          } else if (evt === 'DELETE' && oldRow) {
+            setHomework((prev) => prev.filter((hw) => hw.id !== oldRow.id));
           }
         }
       )
       .subscribe();
 
-    // Subscribe to attachment changes
+    // Subscribe to attachment changes (refetch attachments on change)
     const attachmentSubscription = supabase
       .channel(`attachments-${classId}`)
       .on(
@@ -92,7 +125,7 @@ export function useRealtimeHomework(classId: string) {
       )
       .subscribe();
 
-    // Subscribe to completion changes
+    // Subscribe to completion changes (refetch completion status on change)
     const completionSubscription = supabase
       .channel(`completion-${classId}`)
       .on(
@@ -110,9 +143,21 @@ export function useRealtimeHomework(classId: string) {
       .subscribe();
 
     return () => {
-      homeworkSubscription.unsubscribe();
-      attachmentSubscription.unsubscribe();
-      completionSubscription.unsubscribe();
+      try {
+        homeworkSubscription.unsubscribe();
+      } catch {
+        /* ignore */
+      }
+      try {
+        attachmentSubscription.unsubscribe();
+      } catch {
+        /* ignore */
+      }
+      try {
+        completionSubscription.unsubscribe();
+      } catch {
+        /* ignore */
+      }
     };
   }, [classId, fetchHomework]);
 
@@ -122,16 +167,18 @@ export function useRealtimeHomework(classId: string) {
       if (!user) throw new Error('User not authenticated');
 
       // First, check if a completion record exists
-      const { data: existing } = await supabase
+      const { data: existing, error: existingError } = await supabase
         .from('homework_completion')
         .select('id')
         .eq('homework_id', homeworkId)
         .eq('user_id', user.id)
         .maybeSingle();
 
+      if (existingError) throw existingError;
+
       if (existing) {
         // Update existing record
-        const { error } = await supabase
+        const { error: updateError } = await supabase
           .from('homework_completion')
           .update({
             done,
@@ -140,10 +187,10 @@ export function useRealtimeHomework(classId: string) {
           .eq('homework_id', homeworkId)
           .eq('user_id', user.id);
 
-        if (error) throw error;
+        if (updateError) throw updateError;
       } else {
         // Insert new record
-        const { error } = await supabase
+        const { error: insertError } = await supabase
           .from('homework_completion')
           .insert({
             homework_id: homeworkId,
@@ -152,12 +199,13 @@ export function useRealtimeHomework(classId: string) {
             updated_at: new Date().toISOString(),
           });
 
-        if (error) throw error;
+        if (insertError) throw insertError;
       }
 
       // Refetch to update UI
       await fetchHomework();
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Error toggling completion:', err);
       throw err;
     }

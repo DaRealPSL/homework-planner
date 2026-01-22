@@ -1,3 +1,4 @@
+//src/features/announcements/components/AnnouncementBoard.tsx
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../core/lib/supabase';
 
@@ -41,7 +42,7 @@ export const AnnouncementBoard: React.FC<AnnouncementBoardProps> = ({ classId })
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setAnnouncements(data || []);
+      setAnnouncements((data || []) as Announcement[]);
     } catch (err) {
       console.error('Error loading announcements:', err);
     } finally {
@@ -299,14 +300,16 @@ const AnnouncementForm: React.FC<AnnouncementFormProps> = ({ classId, onClose, o
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
-      const { error: insertError } = await supabase.from('announcements').insert({
-        class_id: classId,
-        created_by: user.id,
-        title,
-        content,
-        priority,
-        pinned,
-      });
+      const { error: insertError } = await supabase.from('announcements').insert(
+        {
+          class_id: classId,
+          created_by: user.id,
+          title,
+          content,
+          priority,
+          pinned,
+        } as any
+    );
 
       if (insertError) throw insertError;
       onSuccess();

@@ -1,35 +1,51 @@
+//src/features/calendar/components/TodayView.tsx
 import React from 'react';
 
 interface HomeworkItem {
   id: string;
-  title: string;
+  //title: string | null | undefined;
+  title?: string | null;
+  class_id?: string;
   subject: string | null;
   description: string | null;
-  due_date: string;
+  //due_date: string | null | undefined;
+  due_date?: string | null;
+  created_by?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+  creator?: {
+    display_name?: string | null;
+    avatar_url?: string | null;
+  } | null;
+  attachments?: any[];
   completion?: Array<{ done: boolean }>;
+  homework_attachments?: unknown;
+  homework_completion?: unknown;
 }
 
 interface TodayViewProps {
   homework: HomeworkItem[];
   onToggleCompletion: (homeworkId: string, done: boolean) => void;
-  onEditHomework: (homework: HomeworkItem) => void;
+  onEditHomework?: (homework: HomeworkItem) => void;
 }
 
 export const TodayView: React.FC<TodayViewProps> = ({
   homework,
   onToggleCompletion,
-  onEditHomework,
+  //onEditHomework,
 }) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   const todayHomework = homework.filter((hw) => {
+    if (!hw.due_date) return false;
     const dueDate = new Date(hw.due_date);
     dueDate.setHours(0, 0, 0, 0);
     return dueDate.getTime() === today.getTime();
   });
 
   const overdueHomework = homework.filter((hw) => {
+    if (!hw.due_date) return false;
     const dueDate = new Date(hw.due_date);
     return dueDate < today && !hw.completion?.[0]?.done;
   });
@@ -83,7 +99,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                 key={hw.id}
                 homework={hw}
                 onToggleCompletion={onToggleCompletion}
-                onEditHomework={onEditHomework}
+                //onEditHomework={onEditHomework}
                 isOverdue
               />
             ))}
@@ -113,7 +129,7 @@ export const TodayView: React.FC<TodayViewProps> = ({
                 key={hw.id}
                 homework={hw}
                 onToggleCompletion={onToggleCompletion}
-                onEditHomework={onEditHomework}
+                //onEditHomework={onEditHomework}
               />
             ))}
           </div>
@@ -126,14 +142,14 @@ export const TodayView: React.FC<TodayViewProps> = ({
 interface HomeworkCardProps {
   homework: HomeworkItem;
   onToggleCompletion: (homeworkId: string, done: boolean) => void;
-  onEditHomework: (homework: HomeworkItem) => void;
+  //onEditHomework: (homework: HomeworkItem) => void;
   isOverdue?: boolean;
 }
 
 const HomeworkCard: React.FC<HomeworkCardProps> = ({
   homework,
   onToggleCompletion,
-  onEditHomework,
+  //onEditHomework,
   isOverdue = false,
 }) => {
   const formatTime = (dateString: string) => {
@@ -178,7 +194,7 @@ const HomeworkCard: React.FC<HomeworkCardProps> = ({
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              {formatTime(homework.due_date)}
++             {homework.due_date ? formatTime(homework.due_date) : 'No due date'}
             </span>
           </div>
         </div>
@@ -197,14 +213,14 @@ const HomeworkCard: React.FC<HomeworkCardProps> = ({
             </svg>
           </button>
 
-          <button
+          {/*<button
             onClick={() => onEditHomework(homework)}
             className="p-2 bg-gray-700 text-gray-400 rounded-lg hover:bg-gray-600 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
-          </button>
+          </button>*/}
         </div>
       </div>
     </div>

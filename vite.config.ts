@@ -9,7 +9,13 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       '@/core': path.resolve(__dirname, './src/core'),
       '@/features': path.resolve(__dirname, './src/features'),
-      '@/shared': path.resolve(__dirname, './src/shared'),
+      '@/shared': path.resolve(__dirname, './src/shared')
     },
+    dedupe: ['react', 'react-dom']
   },
+  server: {
+    fs: {
+      allow: [path.resolve(__dirname, '.')]
+    }
+  }
 });

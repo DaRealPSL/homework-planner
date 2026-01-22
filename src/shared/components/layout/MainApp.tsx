@@ -1,3 +1,4 @@
+//src/shared/components/layout/MainApp.tsx
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -88,7 +89,7 @@ export const MainApp: React.FC<MainAppProps> = ({ classId }) => {
       const query = filters.searchQuery.toLowerCase();
       filtered = filtered.filter(
         (hw) =>
-          hw.title.toLowerCase().includes(query) ||
+          hw.title?.toLowerCase().includes(query) ||
           hw.description?.toLowerCase().includes(query) ||
           hw.subject?.toLowerCase().includes(query)
       );
@@ -112,16 +113,17 @@ export const MainApp: React.FC<MainAppProps> = ({ classId }) => {
 
       switch (filters.sortBy) {
         case 'due_date':
-          comparison = new Date(a.due_date).getTime() - new Date(b.due_date).getTime();
+          //comparison = new Date(a.due_date).getTime() - new Date(b.due_date).getTime();
+          comparison = new Date(a.due_date || 0).getTime() - new Date(b.due_date || 0).getTime();
           break;
         case 'created_at':
-          comparison = new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+          comparison = new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
           break;
         case 'subject':
           comparison = (a.subject || '').localeCompare(b.subject || '');
           break;
         case 'title':
-          comparison = a.title.localeCompare(b.title);
+          comparison = (a.title || '').localeCompare(b.title || '');
           break;
       }
 
@@ -299,9 +301,9 @@ export const MainApp: React.FC<MainAppProps> = ({ classId }) => {
 
         {viewMode === 'today' ? (
           <TodayView
-            homework={filteredHomework}
+            homework={filteredHomework as any}
             onToggleCompletion={toggleCompletion}
-            onEditHomework={handleEditHomework}
+
           />
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -311,7 +313,7 @@ export const MainApp: React.FC<MainAppProps> = ({ classId }) => {
                 <CalendarSkeleton />
               ) : (
                 <CalendarView
-                  homework={filteredHomework}
+                  homework={filteredHomework as any}
                   selectedDate={selectedDate}
                   onDateSelect={setSelectedDate}
                 />
@@ -342,11 +344,13 @@ export const MainApp: React.FC<MainAppProps> = ({ classId }) => {
         date={selectedDate}
         homework={filteredHomework.filter((hw) => {
           if (!selectedDate) return false;
+          if (!hw.due_date) return false;
           const dueDate = new Date(hw.due_date);
           return dueDate.toDateString() === selectedDate.toDateString();
-        })}
+        }) as any}
         onClose={() => setSelectedDate(null)}
-        onEditHomework={handleEditHomework}
+        //onEditHomework={handleEditHomework}
+        onEditHomework={handleEditHomework as any}
         onToggleCompletion={toggleCompletion}
         currentUserId={user?.id}
       />
