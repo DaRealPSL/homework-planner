@@ -1,6 +1,6 @@
 //src/features/announcements/components/AnnouncementBoard.tsx
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../core/lib/supabase';
+import { supabase } from '@/core/lib/supabase';
 
 interface Announcement {
   id: string;

@@ -26,7 +26,7 @@
     "strict": true,
     "noImplicitAny": false,
 
-    /* this root config is for tooling only — don't emit from the root. */
+    /* this root config is for tooling only - don't emit from the root. */
     "noEmit": true
   },
 

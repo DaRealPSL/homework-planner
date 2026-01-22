@@ -3,3 +3,4 @@
 
 // components
 export { SearchFilterBar } from './components/SearchFilterBar';
+export type { FilterOptions } from './components/SearchFilterBar';

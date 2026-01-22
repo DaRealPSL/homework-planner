@@ -1,3 +1,4 @@
+// src/core/lib/supabase.ts
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database";
 
@@ -64,6 +65,7 @@ supabase
 export const getCurrentUser = async () => {
   const {
     data: { user },
+  //} = await supabase.auth.getUser();
   } = await supabase.auth.getUser();
   return user;
 };

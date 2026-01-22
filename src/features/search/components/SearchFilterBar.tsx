@@ -1,3 +1,4 @@
+// src/features/search/components/SearchFilterBar.tsx
 import React, { useState } from 'react';
 
 export interface FilterOptions {
