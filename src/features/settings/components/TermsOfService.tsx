@@ -18,7 +18,7 @@ export const TermsOfService: React.FC = () => {
         </button>
 
         <h1 className="text-3xl font-bold text-white mb-2">Terms of Service</h1>
-        <p className="text-gray-400 mb-8">Last updated: {new Date().toLocaleDateString()} (MM/DD/YYYY)</p>
+        <p className="text-gray-400 mb-8">Last updated: 22/01/2026 (MM/DD/YYYY)</p>
 
         <div className="space-y-6 text-gray-300">
           <section>

@@ -139,6 +139,13 @@ function App() {
             }
           />
 
+          <Route 
+            path='/legal/terms-of-service'
+            element={
+              <TermsOfService />
+            }
+          />
+
         </Routes>
       </div>
     </Router>
