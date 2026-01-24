@@ -274,7 +274,7 @@ test-results/
 # ------------------------
 site/
 docs/
-public/
+#public/
 webpack-stats.json
 DEPLOYMENT.md
 PROJECT_SUMMARY.md
