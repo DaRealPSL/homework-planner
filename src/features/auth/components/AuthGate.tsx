@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
-import { supabase } from '../../../core/lib/supabase';
-import { useNavigate } from 'react-router-dom';
-import { PasswordStrengthMeter, checkPasswordStrength } from '../../security/components/PasswordStrength';
-import { SimpleCaptcha, useRateLimit, RateLimitWarning } from '../../security/components/RateLimiting';
-import { logAuditEvent } from '../../session/components/SessionManagement';
+import React, { useState } from "react";
+import { supabase } from "../../../core/lib/supabase";
+import { useNavigate } from "react-router-dom";
+import {
+  PasswordStrengthMeter,
+  checkPasswordStrength,
+} from "../../security/components/PasswordStrength";
+import {
+  SimpleCaptcha,
+  useRateLimit,
+  RateLimitWarning,
+} from "../../security/components/RateLimiting";
+import { logAuditEvent } from "../../session/components/SessionManagement";
+import { Footer } from "@/shared/index";
 
 interface AuthGateProps {
   classId: string;
@@ -11,12 +19,12 @@ interface AuthGateProps {
 
 export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [showCaptcha, setShowCaptcha] = useState(false);
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const navigate = useNavigate();
@@ -24,41 +32,43 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
   // Rate limiting
   const { isBlocked, resetIn, checkLimit } = useRateLimit(`auth:${email}`);
 
-  const ensureProfile = async (userId: string, userEmail: string, userName?: string) => {
+  const ensureProfile = async (
+    userId: string,
+    userEmail: string,
+    userName?: string,
+  ) => {
     try {
       const { data: existingProfile, error: fetchError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('id', userId)
+        .from("profiles")
+        .select("id")
+        .eq("id", userId)
         .maybeSingle();
 
       if (fetchError) {
-        console.error('Error checking profile:', fetchError);
+        console.error("Error checking profile:", fetchError);
         return;
       }
 
       if (!existingProfile) {
-        const { error: insertError } = await supabase
-          .from('profiles')
-          .insert({
-            id: userId,
-            class_id: classId,
-            display_name: userName || userEmail.split('@')[0],
-          });
+        const { error: insertError } = await supabase.from("profiles").insert({
+          id: userId,
+          class_id: classId,
+          display_name: userName || userEmail.split("@")[0],
+        });
 
-        if (insertError && insertError.code !== '23505') {
-          console.error('Error creating profile:', insertError);
+        if (insertError && insertError.code !== "23505") {
+          console.error("Error creating profile:", insertError);
         }
       }
     } catch (err) {
-      console.error('Profile error:', err);
+      console.error("Profile error:", err);
     }
   };
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setMessage('');
+    setError("");
+    setMessage("");
 
     // Check rate limit
     if (!checkLimit()) {
@@ -69,7 +79,7 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
     if (!isLogin) {
       const strength = checkPasswordStrength(password);
       if (!strength.isStrong) {
-        setError('Password is too weak. Please use a stronger password.');
+        setError("Password is too weak. Please use a stronger password.");
         return;
       }
     }
@@ -81,7 +91,7 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
     }
 
     if (showCaptcha && !captchaVerified) {
-      setError('Please complete the CAPTCHA verification');
+      setError("Please complete the CAPTCHA verification");
       return;
     }
 
@@ -95,18 +105,18 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
         });
 
         if (error) throw error;
-        
+
         if (data.user) {
           await ensureProfile(
-            data.user.id, 
+            data.user.id,
             data.user.email || email,
-            data.user.user_metadata?.display_name
+            data.user.user_metadata?.display_name,
           );
-          
+
           // Log successful login
-          await logAuditEvent('user_login', 'auth', data.user.id);
-          
-          navigate('/app');
+          await logAuditEvent("user_login", "auth", data.user.id);
+
+          navigate("/app");
         }
       } else {
         const { data, error } = await supabase.auth.signUp({
@@ -125,32 +135,34 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
         if (data.user) {
           if (data.user.confirmed_at) {
             await ensureProfile(data.user.id, email, displayName);
-            await logAuditEvent('user_signup', 'auth', data.user.id);
-            setMessage('Account created! Redirecting...');
-            setTimeout(() => navigate('/app'), 1000);
+            await logAuditEvent("user_signup", "auth", data.user.id);
+            setMessage("Account created! Redirecting...");
+            setTimeout(() => navigate("/app"), 1000);
           } else {
-            setMessage('Check your email for the confirmation link!');
+            setMessage("Check your email for the confirmation link!");
           }
         }
         return;
       }
     } catch (err: any) {
-      console.error('Auth error:', err);
-      
-      let errorMessage = err.message || 'An error occurred';
-      
-      if (err.message?.includes('Invalid login credentials')) {
-        errorMessage = 'Invalid email or password. If you just signed up, please confirm your email first.';
+      console.error("Auth error:", err);
+
+      let errorMessage = err.message || "An error occurred";
+
+      if (err.message?.includes("Invalid login credentials")) {
+        errorMessage =
+          "Invalid email or password. If you just signed up, please confirm your email first.";
         // Show CAPTCHA after failed login
         if (!showCaptcha) {
           setShowCaptcha(true);
         }
-      } else if (err.message?.includes('Email not confirmed')) {
-        errorMessage = 'Please confirm your email address before logging in.';
-      } else if (err.message?.includes('User already registered')) {
-        errorMessage = 'This email is already registered. Please sign in instead.';
+      } else if (err.message?.includes("Email not confirmed")) {
+        errorMessage = "Please confirm your email address before logging in.";
+      } else if (err.message?.includes("User already registered")) {
+        errorMessage =
+          "This email is already registered. Please sign in instead.";
       }
-      
+
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -159,12 +171,12 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
 
   const handleMagicLink = async () => {
     if (!email) {
-      setError('Please enter your email address');
+      setError("Please enter your email address");
       return;
     }
 
-    setError('');
-    setMessage('');
+    setError("");
+    setMessage("");
     setLoading(true);
 
     try {
@@ -172,17 +184,17 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
         email,
         options: {
           data: {
-            display_name: displayName || email.split('@')[0],
+            display_name: displayName || email.split("@")[0],
             class_id: classId,
           },
         },
       });
 
       if (error) throw error;
-      setMessage('Check your email for the magic link!');
+      setMessage("Check your email for the magic link!");
     } catch (err: any) {
-      console.error('Magic link error:', err);
-      setError(err.message || 'An error occurred');
+      console.error("Magic link error:", err);
+      setError(err.message || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -193,8 +205,18 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
       <div className="w-full max-w-md">
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            <svg
+              className="w-8 h-8 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
             </svg>
           </div>
         </div>
@@ -202,10 +224,12 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
         <div className="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-700">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">
-              {isLogin ? 'Welcome Back' : 'Join Your Class'}
+              {isLogin ? "Welcome Back" : "Join Your Class"}
             </h1>
             <p className="text-gray-400">
-              {isLogin ? 'Sign in to access your homework' : 'Create a secure account to get started'}
+              {isLogin
+                ? "Sign in to access your homework"
+                : "Create a secure account to get started"}
             </p>
           </div>
 
@@ -215,7 +239,10 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
           <form onSubmit={handleAuth} className="space-y-5">
             {!isLogin && (
               <div>
-                <label htmlFor="displayName" className="block text-sm font-semibold text-gray-300 mb-2">
+                <label
+                  htmlFor="displayName"
+                  className="block text-sm font-semibold text-gray-300 mb-2"
+                >
                   Display Name
                 </label>
                 <input
@@ -231,7 +258,10 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-300 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-semibold text-gray-300 mb-2"
+              >
                 Email Address
               </label>
               <input
@@ -246,7 +276,10 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-300 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-semibold text-gray-300 mb-2"
+              >
                 Password
               </label>
               <input
@@ -259,7 +292,7 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
                 required
                 minLength={8}
               />
-              
+
               {/* Password Strength Meter for Signup */}
               {!isLogin && (
                 <PasswordStrengthMeter password={password} show={true} />
@@ -298,14 +331,31 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
-                  {isLogin ? 'Signing in...' : 'Creating account...'}
+                  {isLogin ? "Signing in..." : "Creating account..."}
                 </span>
+              ) : isLogin ? (
+                "Sign In →"
               ) : (
-                isLogin ? 'Sign In →' : 'Create Account →'
+                "Create Account →"
               )}
             </button>
           </form>
@@ -317,7 +367,7 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
                 disabled={loading || !email || isBlocked}
                 className="w-full px-6 py-3 bg-gray-700 text-gray-300 rounded-xl font-medium hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all border border-gray-600"
               >
-                {loading ? 'Sending...' : '✉️ Send Magic Link'}
+                {loading ? "Sending..." : "✉️ Send Magic Link"}
               </button>
             </div>
           )}
@@ -327,14 +377,16 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
               type="button"
               onClick={() => {
                 setIsLogin(!isLogin);
-                setError('');
-                setMessage('');
+                setError("");
+                setMessage("");
                 setShowCaptcha(false);
                 setCaptchaVerified(false);
               }}
               className="text-primary-400 hover:text-primary-300 font-medium transition-colors"
             >
-              {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+              {isLogin
+                ? "Don't have an account? Sign up"
+                : "Already have an account? Sign in"}
             </button>
           </div>
 
@@ -344,6 +396,8 @@ export const AuthGate: React.FC<AuthGateProps> = ({ classId }) => {
               🔒 Your data is encrypted and secure
             </p>
           </div>
+          {/* Footer */}
+          <Footer />
         </div>
       </div>
     </div>

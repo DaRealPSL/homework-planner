@@ -132,6 +132,13 @@ function App() {
             }
           />
 
+          <Route 
+            path='/legal/privacy-policy'
+            element={
+              <PrivacyPolicy />
+            }
+          />
+
         </Routes>
       </div>
     </Router>

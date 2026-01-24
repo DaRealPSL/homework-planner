@@ -11,3 +11,4 @@ export { MainApp } from './components/layout/MainApp';
 export { DarkModeToggle } from './components/ui/DarkModeToggle';
 export { CalendarSkeleton, HomeworkListSkeleton, StatCardSkeleton } from './components/ui/LoadingSkeletons';
 export { LoadingSpinner } from './components/ui/LoadingSpinner';
+export { Footer } from './components/ui/Footer';

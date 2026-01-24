@@ -11,8 +11,10 @@ import { HomeworkForm } from '@/features/homework';
 import { SearchFilterBar } from '@/features/search';
 import type { FilterOptions } from '@/features/search';
 import { TodayView } from '@/features/calendar';
-import { CalendarSkeleton, StatCardSkeleton } from '@/shared';
-import { useKeyboardShortcuts, KeyboardShortcutsHelp } from '@/shared';
+//import { CalendarSkeleton, StatCardSkeleton } from '@/shared';
+//import { useKeyboardShortcuts, KeyboardShortcutsHelp } from '@/shared';
+//import { Footer } from '@/shared';
+import { CalendarSkeleton, StatCardSkeleton, useKeyboardShortcuts, KeyboardShortcutsHelp, Footer } from '@/shared/index';
 
 interface MainAppProps {
   classId: string;
@@ -216,7 +218,7 @@ export const MainApp: React.FC<MainAppProps> = ({ classId }) => {
               <div className="flex items-center justify-center">
                 <LazyLoadImage
                   alt="Logo"
-                  src="/studiflow_badge_transparent.png"
+                  src="/studiflow.png"
                   className="h-16 w-auto select-none"
                   draggable={false}
                 />
@@ -370,6 +372,9 @@ export const MainApp: React.FC<MainAppProps> = ({ classId }) => {
 
       {/* Keyboard Shortcuts Help */}
       <KeyboardShortcutsHelp isOpen={showShortcuts} onClose={() => setShowShortcuts(false)} />
+
+        {/* Footer */}
+      <Footer /> 
     </div>
   );
 };

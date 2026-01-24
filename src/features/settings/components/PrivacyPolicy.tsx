@@ -18,7 +18,7 @@ export const PrivacyPolicy: React.FC = () => {
         </button>
 
         <h1 className="text-3xl font-bold text-white mb-2">Privacy Policy</h1>
-        <p className="text-gray-400 mb-8">Last updated: 05/01/2026 (DD/MM/YYYY)</p>
+        <p className="text-gray-400 mb-8">Last updated: 22/01/2026 (DD/MM/YYYY)</p>
 
         <div className="space-y-6 text-gray-300">
           <section>

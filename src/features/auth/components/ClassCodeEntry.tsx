@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Footer } from '@/shared/index';
 import { supabase } from '@/core/lib/supabase';
 
 interface ClassCodeEntryProps {
@@ -193,10 +194,8 @@ export const ClassCodeEntry: React.FC<ClassCodeEntryProps> = ({ onClassCodeValid
           </div>
         </div>
 
-        {/* Footer */}
-        <p className="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
-          ✨ Made by PSL for students ✨
-        </p>
+      {/* Footer */}
+      <Footer />
       </div>
     </div>
   );
