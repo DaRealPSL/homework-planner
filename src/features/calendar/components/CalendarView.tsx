@@ -108,7 +108,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               {dayHomework.slice(0, 3).map((_, idx) => (
                 <div
                   key={idx}
-                  className={`w-1 h-1 rounded-full ${
+                  className={`w-2 h-2 rounded-full ${
                     isCurrentDay ? 'bg-white' : 'bg-red-500'
                   }`}
                 />
